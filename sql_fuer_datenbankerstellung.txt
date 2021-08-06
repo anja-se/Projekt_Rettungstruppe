@@ -1,0 +1,149 @@
+
+
+-- phpMyAdmin SQL Dump
+-- version 4.9.3
+-- https://www.phpmyadmin.net/
+--
+-- Host: localhost:8889
+-- Erstellungszeit: 06. Jun 2021 um 18:36
+-- Server-Version: 5.7.26
+-- PHP-Version: 7.4.2
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
+
+--
+-- Datenbank: `rettungstrupp`
+--
+
+CREATE DATABASE `rettungstrupp`;
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `courses`
+--
+
+CREATE TABLE `courses` (
+  `courseID` int(11) NOT NULL,
+  `courseNum` varchar(15) NOT NULL,
+  `courseName` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Daten für Tabelle `courses`
+--
+
+INSERT INTO `courses` (`courseID`, `courseNum`, `courseName`) VALUES
+(1, 'IMT101', 'Mathematik Grundlagen I'),
+(2, 'BWIR01-01', 'Einführung in das wissenschaftliche Arbeiten'),
+(3, 'BBWL', 'Betriebswirtschaftslehre'),
+(4, 'IGIS01', 'Grundlagen der industriellen Softwaretechnik'),
+(5, 'BCTR01-01', 'Computer Training'),
+(6, 'IOBP', 'Objektorientierte Programmierung'),
+(17, 'DLBINGEIT01', 'Einführung in das Internet of Things'),
+(18, 'IMT102-01', 'Mathematik Grundlagen II'),
+(19, 'IPWA', 'Programmierung von Webanwendungen'),
+(20, 'IREN01', 'Requirements Engineering'),
+(21, 'BSTA01-01', 'Statistik'),
+(22, 'DLBIBRVS01', 'Betriebssysteme, Rechnernetze und verteilte Systeme'),
+(23, 'DLBIADPS01', 'Algorithmen, Datenstrukturen und Programmiersprachen'),
+(24, 'IDBS01', 'Datenmodellierung und Datenbanksysteme'),
+(25, 'ISPE01', 'Spezifikation'),
+(26, 'IPMG01', 'IT-Projektmanagement');
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `rel_status`
+--
+
+CREATE TABLE `rel_status` (
+  `courseID` int(11) NOT NULL,
+  `userID` int(11) NOT NULL,
+  `status` enum('not started','in progress','completed') NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Daten für Tabelle `rel_status`
+--
+
+INSERT INTO `rel_status` (`courseID`, `userID`, `status`) VALUES
+(1, 1, 'completed'),
+(2, 1, 'completed'),
+(4, 1, 'in progress'),
+(6, 1, 'completed'),
+(24, 1, 'completed');
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `user`
+--
+
+CREATE TABLE `user` (
+  `userID` int(11) NOT NULL,
+  `username` varchar(20) NOT NULL,
+  `firstname` varchar(20) NOT NULL,
+  `lastname` varchar(20) NOT NULL,
+  `password` varchar(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Daten für Tabelle `user`
+--
+
+INSERT INTO `user` (`userID`, `username`, `firstname`, `lastname`, `password`) VALUES
+(1, 'anjaseidel', 'Anja', 'Seidel', 'anja'),
+(3, 'peterlu', 'peter', 'lustig', '123'),
+(4, 'penelope', 'Penny', 'Lu', 'penny');
+
+--
+-- Indizes der exportierten Tabellen
+--
+
+--
+-- Indizes für die Tabelle `courses`
+--
+ALTER TABLE `courses`
+  ADD PRIMARY KEY (`courseID`);
+
+--
+-- Indizes für die Tabelle `rel_status`
+--
+ALTER TABLE `rel_status`
+  ADD PRIMARY KEY (`courseID`,`userID`),
+  ADD KEY `constr_user` (`userID`);
+
+--
+-- Indizes für die Tabelle `user`
+--
+ALTER TABLE `user`
+  ADD PRIMARY KEY (`userID`);
+
+--
+-- AUTO_INCREMENT für exportierte Tabellen
+--
+
+--
+-- AUTO_INCREMENT für Tabelle `courses`
+--
+ALTER TABLE `courses`
+  MODIFY `courseID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+
+--
+-- AUTO_INCREMENT für Tabelle `user`
+--
+ALTER TABLE `user`
+  MODIFY `userID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- Constraints der exportierten Tabellen
+--
+
+--
+-- Constraints der Tabelle `rel_status`
+--
+ALTER TABLE `rel_status`
+  ADD CONSTRAINT `constr_course` FOREIGN KEY (`courseID`) REFERENCES `courses` (`courseID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `constr_user` FOREIGN KEY (`userID`) REFERENCES `user` (`userID`) ON DELETE CASCADE ON UPDATE CASCADE;
